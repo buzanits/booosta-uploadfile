@@ -7,9 +7,23 @@ trait webapp
 {
   protected function uploaded_file($name, $dir = 'upload/', $preservename = false)
   {
+    $obj = $this->uploaded_file_obj($name, $dir, $preservename);
+    return $obj->get_filename();
+  }
+
+  protected function uploaded_file_origname($name, $dir = 'upload/', $preservename = false)
+  {
+    $obj = $this->uploaded_file_obj($name, $dir, $preservename);
+    if(!is_object($obj)) return null;
+
+    return ['file' => $obj->get_filename(), 'origname' => $obj->get_origname()];
+  }
+
+  protected function uploaded_file_obj($name, $dir = 'upload/', $preservename = false)
+  {
     $upfile = $this->makeInstance('uploadfile', $name, $dir, $preservename);
     if(!$upfile->is_valid()) return null;
-    return $upfile->get_filename();
+    return $upfile;
   }
 
   protected function replace_uploaded_file($field, $name, $dir = 'upload/', $preservename = false, $obj = null)
